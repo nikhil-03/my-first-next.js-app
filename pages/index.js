@@ -1,18 +1,39 @@
 import Head from 'next/head'
-import Grid from "@material-ui/core/Grid"
-export default function first()
+import Layout, { siteTitle } from '../components/layout'
+import utilStyles from "../styles/utils.module.css";
+import { getSortedPostsData } from '../lib/posts'
+
+// export async function getStaticProps() 
+export async function getServerSideProps()
 {
- return <div>
-   <Grid container spacing={3}>
- <Grid item xs={12}>
-   <h1>Hello World</h1>
- </Grid>
- <Grid item xs={12} sm={6}>
-    <h4 className="main-heading">Im NIKHIL</h4>
-   </Grid>
-   <Grid item xs={12} sm={6}>
-   <h4 className="main-heading">BIT Mesra</h4>
-   </Grid>
-</Grid>
- </div>
+  const allPostsData = getSortedPostsData()
+  return {
+    props: {
+      allPostsData
+    }
+  }
+}
+
+
+export default function Home({ allPostsData }) {
+  return (
+    <Layout home>
+      <Head>…</Head>
+      <section >…</section>
+      <section className={`${utilStyles.headingMd} ${utilStyles.padding1px}`}>
+        <h2 className={utilStyles.headingLg}>Blog</h2>
+        <ul >
+          {allPostsData.map(({ id, date, title }) => (
+            <li className={utilStyles.listItem} key={id}>
+              {title}
+              <br />
+              {id}
+              <br />
+              {date}
+            </li>
+          ))}
+        </ul>
+      </section>
+    </Layout>
+  )
 }
